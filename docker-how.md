@@ -58,6 +58,10 @@ Volume can be mounted into multiple containers simultaneously.
 
 Remove unused volumes with `docker volume prune`
 
-Note: preexisting folder structure is obscured by the mount if you mount volume into it
+Note: preexisting folder structure is obscured by the mount if you mount nonempty volume into it
 
 Note: mounting empty volume into the folder propagates (copy) folders content into volume
+
+You can create read-only volumes. You can mount into volume sub path.
+
+See documentation on driver usage, backup, migrate, restore using volumes, etc.

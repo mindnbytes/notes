@@ -14,6 +14,16 @@ to be root. I want to explore and better understand rootless Docker daemon here.
 Rootless mode runs the daemon and containers from a user namespace. It works similar to `userns-remap` mode.
 They differ as noted in how daemon runs and how they map container UIDs and GIDs to the host.
 
+`dockerd` runs under user with their own `docker.sock`. Daemon still needs to create PID, network, mount namespaces,
+which requires `CAP_SYS_ADMIN`. It utilizes user namespace, the only one, which can be created by non-root user.
+One problem in user namespace user maps to nobody UID. Rootless Docker uses helper RootlessKit to bootstrap user namespace,
+RootlessKit does the remapping of UID and GID with `newuidmap` and `newgidmap`, such that the process inside the container
+appears to be root. Those helpers installed with `setuid` bit, which grants them permissions to temporarily run an executable
+with permissions of file's owner - typically `root` - instead of the calling user. With those privileges granted, the daemon
+can create all the nested namespaces it needs, because the kernel permits nested namespace creation when a user namespace is
+the outermost boundary. Read this great [blogpost](https://www.kenmuse.com/blog/rootless-docker-and-its-hidden-security-trade-offs/)
+for more details and clear explanations.
+
 ### User Remap
 
 This part is for conceptual understanding of user remap. We shouldn't do it for the rootless install, as daemon itself is

@@ -22,7 +22,8 @@ appears to be root. Those helpers installed with `setuid` bit, which grants them
 with permissions of file's owner - typically `root` - instead of the calling user. With those privileges granted, the daemon
 can create all the nested namespaces it needs, because the kernel permits nested namespace creation when a user namespace is
 the outermost boundary. Read this great [blogpost](https://www.kenmuse.com/blog/rootless-docker-and-its-hidden-security-trade-offs/)
-for more details and clear explanations.
+for more details and clear explanations. Rootless BuildKit operates in the similar manner utilizing user namespace bootstrapped
+by RootlessKit.
 
 ### User Remap
 
